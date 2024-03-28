@@ -1,0 +1,3 @@
+#include the git ignore files in this file which are not meant to be tracked
+
+.env

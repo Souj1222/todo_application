@@ -5,7 +5,12 @@ const todoServices = require('../../services/todoServices')
 //list all todos
 exports.listtodos = async(req,res)=>{
     const todos = await todoServices.getAllTodos();
-    res.json(todos)
+    if(todos.length <1){
+        res.json('No Todo List Found').status(404)
+    }else{
+         res.json(todos)
+    }
+   
 }
 
 //create  a new todo 
@@ -17,7 +22,9 @@ exports.createtodo = async(req,res)=>{
 
 //reading a individual todo
 exports.readtodo = async(req,res)=>{
-    const{id} = req.params;
+    console.log("this is the readtodo function")
+    const {id} = req.params;
+
     try{
         const todo = await todoServices.getTodoById(id)
         if(!todo){

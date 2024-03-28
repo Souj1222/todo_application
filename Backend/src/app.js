@@ -1,12 +1,12 @@
 
 
 //imports for the app
-const expresss = require('express')
-const app = expresss();
+const express = require('express')
+const app = express();
 const routes = require("./api/routes/todoroutes")
 
 
-app.use(expresss.json())
+app.use(express.json())
 app.use('/api/todos',routes)
 
 
