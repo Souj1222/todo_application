@@ -45,7 +45,7 @@ const Signup = () => {
       // Dispatch the register action with the API response data
       dispatch(register(data));
       // Navigate to the home page or a post-signup page
-      navigate(APP_ENDPOINTS.HOME);
+      navigate(APP_ENDPOINTS.ROOT);
     } catch (error) {
       console.error('Signup error:', error);
       // Handle signup error (e.g., show an error message)

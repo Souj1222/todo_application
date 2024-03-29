@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../store/auth/authSlice'; // Adjust the import path to your actual authSlice location
+import { authDataInStore, login } from '../../store/auth/authSlice'; // Adjust the import path to your actual authSlice location
 import APP_ENDPOINTS from '../../constants/AppEndPoints'; // Adjust the import path to your actual AppEndpoints location
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -13,6 +13,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const {isLoggedIn} = useSelector(authDataInStore)
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -37,10 +39,11 @@ const Login = () => {
         throw new Error('Login failed');
       }
       const data = await response.json();
+      console.log(data)
+      // Navigate to the home page upon successful login
+      navigate(APP_ENDPOINTS.ROOT);
       // Dispatch the login action with the API response data
       dispatch(login(data));
-      // Navigate to the home page upon successful login
-      navigate(APP_ENDPOINTS.HOME);
     } catch (error) {
       console.error('Login error:', error);
       // Handle login error (e.g., show an error message)

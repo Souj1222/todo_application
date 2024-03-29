@@ -9,18 +9,18 @@ function RequireAuth({ children }) {
   
   const navigate = useNavigate()
   const { isLoggedIn } = useSelector(authDataInStore)
-
+  console.log(isLoggedIn)
   // const { user_details, session_expires_at } = useSelector(authDataInStore)
 
   useEffect(()=>{
       if(!isLoggedIn){
         navigate(APP_ENDPOINTS.AUTH)
+      }else{
+        navigate(APP_ENDPOINTS.ROOT)
       }
   },[isLoggedIn,navigate])
 
-  if (!isLoggedIn) {
-    return <Navigate to={APP_ENDPOINTS.AUTH} replace />
-  }
+ 
   return children
 }
 
