@@ -54,9 +54,9 @@ exports.login = async({email,password})=>{
     }
 }
 
-exports.getAllTodos = async()=>{
+exports.getAllTodos = async(userId)=>{
    try{
-    return await Todo.find()
+    return await Todo.find({user:userId})
    }catch(error){
     console.log("Error in getting all todos", error);
     throw new Error('Error getting todos: ' + error.message);
@@ -65,7 +65,12 @@ exports.getAllTodos = async()=>{
 
 exports.createTodo = async(data)=>{
     try{
-        const todo = new Todo(data)
+        const tododata = {
+            ...data,
+            user: data.userId
+        }
+        
+        const todo = new Todo(tododata)
         await todo.save();
         return todo
     }catch(error){
@@ -73,9 +78,9 @@ exports.createTodo = async(data)=>{
     }
 }
 
-exports.getTodoById = async(id)=>{
+exports.getTodoById = async(id,userId)=>{
     try{
-        const todo = await Todo.findById(id);
+        const todo = await Todo.findOne({_id:id,user:userId});
         return todo
 
     }catch(error){
@@ -83,9 +88,10 @@ exports.getTodoById = async(id)=>{
     }
 }
 
-exports.updateTodo = async(id,data)=>{
+exports.updateTodo = async(id,data,userId)=>{
     try{
-        const updateTodo = await Todo.findByIdAndUpdate(id,data, {new:true});
+
+        const updateTodo = await Todo.findByIdAndUpdate(id,data, {new:true},{user:userId});
         return updateTodo
     }catch(error){
         throw new Error('Error updating the todo'+error.message)
@@ -93,9 +99,21 @@ exports.updateTodo = async(id,data)=>{
 }
 
 
-exports.deleteTodoById = async(id) =>{
+exports.deleteTodoById = async(id,userId) =>{
     try{
-        await Todo.findByIdAndDelete(id)
+        
+        const todoToBeRemove = await Todo.findById(id)
+        if(todoToBeRemove){
+            const deletedata = {
+            _id:id,
+            user:userId
+        }
+        await Todo.deleteOne(deletedata)
+        
+        }else{
+            throw new Error("this todo does not exist")
+        }
+        
     }catch(error){
         throw new Error('Error deleting the todo:'+error.message)
     }

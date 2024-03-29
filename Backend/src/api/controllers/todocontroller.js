@@ -4,7 +4,9 @@ const todoServices = require('../../services/todoServices')
 
 //list all todos
 exports.listtodos = async(req,res)=>{
-    const todos = await todoServices.getAllTodos();
+    const userId = req.user.userId
+    console.log(userId)
+    const todos = await todoServices.getAllTodos(userId);
     if(todos.length <1){
         res.json('No Todo List Found').status(404)
     }else{
@@ -15,8 +17,9 @@ exports.listtodos = async(req,res)=>{
 
 //create  a new todo 
 exports.createtodo = async(req,res)=>{
+    const userId = req.user.userId
     const {title, description} = req.body;
-    const todo = await todoServices.createTodo({title, description})
+    const todo = await todoServices.createTodo({title, description,userId})
     res.status(201).json(todo)
 }
 
@@ -24,9 +27,10 @@ exports.createtodo = async(req,res)=>{
 exports.readtodo = async(req,res)=>{
     console.log("this is the readtodo function")
     const {id} = req.params;
+    const userId = req.user.userId
 
     try{
-        const todo = await todoServices.getTodoById(id)
+        const todo = await todoServices.getTodoById(id,userId)
         if(!todo){
             return res.status(404).json({message:"The Todo with given ID was not found."});
         }
@@ -44,9 +48,10 @@ exports.readtodo = async(req,res)=>{
 
 exports.updateTodo = async(req,res)=>{
     const{id} = req.params;
+    const userId = req.user.userId
     const{title,description} = req.body
     try{
-        const updateTodo = await todoServices.updateTodo(id,{title,description})
+        const updateTodo = await todoServices.updateTodo(id,{title,description},userId)
         if(!updateTodo){
             return res.status(404).json({message:'Cannot Update The Todo'})
         }
@@ -59,8 +64,9 @@ exports.updateTodo = async(req,res)=>{
 
 exports.deleteTodo=async (req,res)=> {
 const { id } = req.params;
+const userId = req.user.userId
 try{
-   let deleteTodo = await todoServices.deleteTodoById(id)
+   let deleteTodo = await todoServices.deleteTodoById(id,userId)
    if (!deleteTodo) {
        return res.status(404).json({ message: "The Todo with the provided ID does not exist!" });
    }
