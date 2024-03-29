@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const todocontroller = require('../controllers/todocontroller')
+const todocontroller = require('../../controllers/todocontroller')
 
 
 

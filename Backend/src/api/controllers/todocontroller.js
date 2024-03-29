@@ -70,3 +70,40 @@ try{
     res.status(500).json({ message: err.message });
 }
 };
+
+
+//register function 
+exports.register = async(req,res)=>{
+    try{
+        const {email,password} = req.body;
+        if(!email || !password ){
+            return res.status(400).json({message:"Please provide email and password"});
+        }else{
+            const user = await  todoServices.createUser({email,password});
+            res.status(201).json(user);
+        }
+
+    }catch(error){
+        res.status(500).json({message:error.message})
+        console.log(error.message)
+    }
+}
+
+
+//user login
+exports.login = async (req,res)=>{
+    try{
+    //get the data from body of request
+    const {email,password}=req.body;
+    
+    //check if there is no email or password then send a response to client
+    if(!email||!password) return res.status(400).json({message:'please provide an email and a password'})
+
+    const user = await todoServices.login({email,password})
+    res.status(201).json(user)
+
+    }catch(error){
+        console.log(error.message,"failed to login")
+        res.status(500).json({message:error.message})
+    }
+}
