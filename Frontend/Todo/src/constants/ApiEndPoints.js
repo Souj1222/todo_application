@@ -3,6 +3,6 @@ export const BASE_URL = (url)=>
 
 
 export const AUTH_END_POINTS = {
-    LOGIN: BASE_URL('auth/login'),
-    REGISTER:BASE_URL('auth/register')
+    LOGIN: BASE_URL('/auth/login'),
+    REGISTER:BASE_URL('/auth/register')
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../../store/auth/authSlice'; // Adjust the import path to your actual authSlice location
+import { authDataInStore, register } from '../../store/auth/authSlice'; // Adjust the import path to your actual authSlice location
 import APP_ENDPOINTS from '../../constants/AppEndPoints'; // Adjust the import path to your actual AppEndpoints location
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -19,6 +19,9 @@ const Signup = () => {
     // Include other registration fields as needed
   });
 
+  const {user}  = useSelector(authDataInStore)
+  
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setUserData(prevUserData => ({
@@ -31,7 +34,7 @@ const Signup = () => {
     event.preventDefault();
     // Placeholder for your API call to the signup endpoint
     try {
-      const response = await fetch('https://localhost:3000/api/auth/register', {
+      const response = await fetch(AUTH_END_POINTS.REGISTER, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
