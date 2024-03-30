@@ -14,7 +14,6 @@ const Home = () => {
   const [todos, setTodos] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
 
-
   useEffect(() => {
     todolist();
   }, []);
@@ -38,7 +37,6 @@ const Home = () => {
       const data = await response.json();
 
       setTodos(data);
-      
     } catch (error) {
       return null;
     }
@@ -49,8 +47,8 @@ const Home = () => {
 
   const handleAddTodoSubmit = (newTodo) => {
     // Add the new todo to the current list of todos
-    setTodos(prevTodos => [...prevTodos, newTodo]);
-  }
+    setTodos((prevTodos) => [...prevTodos, newTodo]);
+  };
 
   return (
     <Box
@@ -77,27 +75,47 @@ const Home = () => {
           add new todo
         </Button>
         <AddTodoModal
-        open={openModal}
-        onClose={handleCloseModal}
-        onSubmit={handleAddTodoSubmit}
-      />
+          open={openModal}
+          onClose={handleCloseModal}
+          onSubmit={handleAddTodoSubmit}
+        />
       </Box>
-      <Divider  />
+      <Divider />
       <Box mt={2}>
-      {todos.map((todo) => (
-        <Accordion key={todo._id}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls={`panel${todo._id}-content`}
-            id={`panel${todo._id}-header`}
-          >
-            <Typography>{todo.title}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>{todo.description}</Typography>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+        {todos.map((todo) => (
+          <Accordion key={todo._id}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={`panel${todo._id}-content`}
+              id={`panel${todo._id}-header`}
+              
+            >
+              <Box
+                display={"flex"}
+                flexDirection={"row"}
+                justifyContent={"space-between"}
+                width={"100%"}
+                alignItems={"center"}
+                mr={2}
+              >
+              <Typography>{todo.title}</Typography>
+              <Button
+                color="secondary"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent accordion from expanding
+                  handleDeleteTodo(todo._id);
+                }}
+                onFocus={(event) => event.stopPropagation()} // Prevent focus from expanding the accordion
+              >
+                Delete
+              </Button>
+              </Box>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>{todo.description}</Typography>
+            </AccordionDetails>
+          </Accordion>
+        ))}
       </Box>
     </Box>
   );
