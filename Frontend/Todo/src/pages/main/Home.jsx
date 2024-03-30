@@ -7,11 +7,13 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import { Box, Button, Divider } from "@mui/material";
+import AddTodoModal from "../../modals/AddNewTodoModal";
 
 const Home = () => {
   const { user } = useSelector(authDataInStore);
   const [todos, setTodos] = React.useState([]);
-  console.log(todos);
+  const [openModal, setOpenModal] = React.useState(false);
+
 
   useEffect(() => {
     todolist();
@@ -36,15 +38,20 @@ const Home = () => {
       const data = await response.json();
 
       setTodos(data);
-      console.log(todos);
+      
     } catch (error) {
       return null;
     }
   };
 
-  const handleaddnew =()=>{
-    
+  const handleopenmodal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
+  const handleAddTodoSubmit = (newTodo) => {
+    // Add the new todo to the current list of todos
+    setTodos(prevTodos => [...prevTodos, newTodo]);
   }
+
   return (
     <Box
       minWidth={"800px"}
@@ -61,15 +68,22 @@ const Home = () => {
         flexDirection={"row"}
         justifyContent={"space-between"}
         alignItems={"center"}
+        mb={2}
       >
         <Typography color={"black"} variant="h6">
           Your Todo list
         </Typography>
-        <Button color="primary" onClick={handleaddnew}>
+        <Button color="primary" onClick={handleopenmodal}>
           add new todo
         </Button>
+        <AddTodoModal
+        open={openModal}
+        onClose={handleCloseModal}
+        onSubmit={handleAddTodoSubmit}
+      />
       </Box>
-      <Divider />
+      <Divider  />
+      <Box mt={2}>
       {todos.map((todo) => (
         <Accordion key={todo._id}>
           <AccordionSummary
@@ -84,6 +98,7 @@ const Home = () => {
           </AccordionDetails>
         </Accordion>
       ))}
+      </Box>
     </Box>
   );
 };

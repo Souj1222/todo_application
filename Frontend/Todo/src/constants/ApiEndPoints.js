@@ -6,3 +6,7 @@ export const AUTH_END_POINTS = {
     LOGIN: BASE_URL('/auth/login'),
     REGISTER:BASE_URL('/auth/register')
 }
+
+export const TODO_API = {
+    CREATE_NEW_TODO : BASE_URL('/todos')
+}

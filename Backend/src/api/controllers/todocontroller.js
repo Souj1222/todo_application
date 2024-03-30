@@ -19,8 +19,13 @@ exports.listtodos = async(req,res)=>{
 exports.createtodo = async(req,res)=>{
     const userId = req.user.userId
     const {title, description} = req.body;
-    const todo = await todoServices.createTodo({title, description,userId})
-    res.status(201).json(todo)
+    if(title && description){
+         const todo = await todoServices.createTodo({title, description,userId})
+         res.status(201).json(todo)
+    }else{
+        res.status(400).json("Please provide title and description")
+    }
+   
 }
 
 //reading a individual todo
