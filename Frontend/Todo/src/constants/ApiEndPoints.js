@@ -8,5 +8,8 @@ export const AUTH_END_POINTS = {
 }
 
 export const TODO_API = {
-    CREATE_NEW_TODO : BASE_URL('/todos')
+    GET_ALL_TODOS: BASE_URL("/todos"),
+    CREATE_NEW_TODO : BASE_URL('/todos'),
+    DELETE_TODO : (id)=>BASE_URL(`/todos/${id}`),
+    UPDATE_TODO: (id)=>BASE_URL(`/todos/${id}`) 
 }
