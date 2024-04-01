@@ -6,7 +6,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
-import { Box, Button, Divider } from "@mui/material";
+import { Box, Button, Divider, useMediaQuery, useTheme } from "@mui/material";
 import AddTodoModal from "../../modals/AddNewTodoModal";
 import { handleDeleteTodo } from "../utils/UtilsFunctions";
 import AddCircleOutlineTwoToneIcon from "@mui/icons-material/AddCircleOutlineTwoTone";
@@ -14,6 +14,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { TODO_API } from "../../constants/ApiEndPoints";
 import UpdateTodoModal from "../../modals/UpdateTodomodal";
+import LogoutIcon from '@mui/icons-material/Logout';
+
 
 const Home = () => {
   const { user } = useSelector(authDataInStore);//fetching the current user from the redux store
@@ -21,6 +23,10 @@ const Home = () => {
   const [openModal, setOpenModal] = React.useState(false);//state to track the models open and close
   const [updateModalOpen, setUpdateModalOpen] = React.useState(false);//state to open and close the update modal
   const [currentTodo, setCurrentTodo] = React.useState(null); // To track the todo being edited
+
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
 
   //useeffect to update the todolist  whenver the component mounts
@@ -93,9 +99,16 @@ const Home = () => {
     }
   };
 
+  //handlelogout function
+  const  handleLogOut=()=>{
+    localStorage.removeItem('user');
+    window.location.reload();
+  }
+
   return (
     <Box
-      minWidth={"800px"}
+    sx={{minWidth: isMobile?"0": "800PX"}}
+      
       display="flex"
       flexDirection="column"
       minHeight={"65vh"}
@@ -112,9 +125,10 @@ const Home = () => {
         mb={2}
         maxHeight={48}
       >
-        <Typography color={"black"} variant="h6">
+        <Typography color={"black"} sx={{varient : isMobile? "h3":"h5", fontWeight:"bold" }}>
           Your Todo list
         </Typography>
+        <Box>
         <Button color="primary" onClick={handleopenmodal}>
           <Box
             display={"flex"}
@@ -123,9 +137,17 @@ const Home = () => {
             gap={1}
           >
             <AddCircleOutlineTwoToneIcon />
-            add new todo
+            {isMobile? "" : "add new"}
           </Box>
         </Button>
+        <Button
+          onClick={handleLogOut}
+
+        >
+          <LogoutIcon />
+        </Button>
+        </Box>
+        
         <AddTodoModal
           open={openModal}
           onClose={handleCloseModal}
@@ -209,7 +231,7 @@ const Home = () => {
               color={"black"}
               style={{ textAlign: "center", marginTop: "20px" }}
             >
-              Create a todo list.
+              Create your todo list.
             </Typography>
           </Box>
         )}
